@@ -1,0 +1,415 @@
+# Filename: mycam.kv
+
+#:import sets settings
+
+#:set var_width sets.width
+#:set var_height sets.height
+#:set var_video_size sets.video_size
+#:set var_frames sets.frames
+#:set var_check sets.auto_check
+#:set var_brightness sets.brightness
+#:set var_contrast sets.contrast
+#:set var_saturation sets.saturation
+#:set var_hue sets.hue
+#:set var_exposure sets.exposure
+#:set var_sharpness sets.sharpness
+#:set var_auto_exposure sets.auto_exposure
+#:set var_gamma sets.gamma
+#:set var_temperature sets.temperature
+#:set var_focus sets.focus
+#:set var_backlight sets.backlight
+#:set var_auto_focus sets.auto_focus
+#:set var_auto_white_balance sets.auto_white_balance
+#:set var_white_balance sets.white_balance
+
+
+<MySettings>:
+    name: 'settings'
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            BoxLayout:
+                KivyCamera:
+                    id: camera
+                    allow_stretch: True
+
+            BoxLayout:
+                orientation: 'vertical'
+                width: root.width/2 if root.isShownMenu else 0
+                height: root.height/2 if root.isShownMenu else 0
+                size_hint: (None, None)
+                opacity: 1 if root.isShownMenu else 0
+
+                BoxLayout:
+                    Label:
+                        text: 'Auto Exposure'
+
+                    BoxLayout:
+
+                        Label:
+                            text: 'No'
+
+                        Slider:
+                            id: auto_exposure
+                            min: 1
+                            value: var_auto_exposure
+                            max: 3
+                            step: 2
+                            on_value: root.up_auto_exposure(*args)
+                            orientation: 'horizontal'
+                            value_track_color: 1, 1, 0, 0
+
+                        Label:
+                            text: 'Yes'
+
+                BoxLayout:
+                    Label:
+                        text: 'Auto Focus'
+
+                    BoxLayout:
+
+                        Label:
+                            text: 'No'
+
+                        Slider:
+                            id: auto_focus
+                            min: 0
+                            value: var_auto_focus
+                            max: 1
+                            step: 1
+                            on_value: root.up_auto_focus(*args)
+                            orientation: 'horizontal'
+                            value_track_color: 1, 1, 0, 0
+
+                        Label:
+                            text: 'Yes'
+
+                BoxLayout:
+                    Label:
+                        text: 'Auto White Balance'
+
+                    BoxLayout:
+
+                        Label:
+                            text: 'No'
+
+                        Slider:
+                            id: auto_white_balance
+                            min: 0
+                            value: var_auto_white_balance
+                            max: 1
+                            step: 1
+                            on_value: root.up_auto_white_balance(*args)
+                            orientation: 'horizontal'
+                            value_track_color: 0, 1, 0, 1
+
+                        Label:
+                            text: 'Yes'
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    height: 48
+
+                    Label:
+                        text: 'Video Size'
+
+                    Spinner:
+                        id: spinner
+                        text: var_video_size
+                        #size_hint_x: None
+                        #background_color: 0, 0, 0, 1
+                        values:
+                            '640 x 480 (4:3)', '800 x 600 (4:3)', '960 x 720 (4:3)', '1280 x 960 (4:3)',\
+                            '640 x 360 (16:9)', '960 x 540 (16:9)', '1280 x 720 (16:9)', '1920 x 1080 (16:9)'
+                        on_text:
+                            root.up_video_size(*args)
+
+                BoxLayout:
+                    Label:
+                        text: 'Auto check on startup?'
+
+                    Switch:
+                        id: check_switch
+                        active: True
+                        on_active: root.up_check(*args)
+
+                BoxLayout:
+                    height: '48dp'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: (1, None)
+                #height: 0 if root.isShownMenu else 48
+                size: root.width , 0 if root.isShownMenu else '48dp'
+                opacity: 0 if root.isShownMenu else 1
+
+                ToggleButton:
+                    id: toggle_identify
+                    text:"Identify"
+                    on_release:
+                        root.myframe()
+
+                Button:
+                    text:"Settings"
+                    on_release:
+                        root.isShownMenu = not root.isShownMenu
+                        #if toggle_identify.state == 'down': toggle_identify.on_release = root.myframe()
+                        #if toggle_identify.state == 'down': toggle_identify
+
+        BoxLayout:
+            orientation: 'vertical'
+            width: root.width/2 if root.isShownMenu else 0
+            #height: 120
+            size_hint: (None, 1)
+            opacity: 1 if root.isShownMenu else 0
+
+            Label:
+                text: 'Settings'
+                font_size: '28sp'
+                bold: True
+                color: 0,1,0,1
+
+
+
+            BoxLayout:
+                Label:
+                    text: 'Frames/sec'
+                    color: 1,0,0,1
+
+                Slider:
+                    id: frames
+                    min: 25
+                    value: var_frames
+                    max: 60
+                    step: 5
+                    on_value: root.up_frames(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 1, 1, 0, 1
+
+                Label:
+                    text: str(frames.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Brightness'
+
+                Slider:
+                    id: brightness
+                    min: -64
+                    value: var_brightness
+                    max: 64
+                    step: 1
+                    on_value: root.up_brightness(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 1, 1, 0, 0
+
+                Label:
+                    text: str(brightness.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Contrast'
+
+                Slider:
+                    id: contrast
+                    min: 0
+                    value: var_contrast
+                    max: 95
+                    step: 1
+                    on_value: root.up_contrast(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 1, 1, 0, 0
+
+                Label:
+                    text: str(contrast.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Saturation'
+
+                Slider:
+                    id: saturation
+                    min: 0
+                    value: var_saturation
+                    max: 67
+                    step: 1
+                    on_value: root.up_saturation(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 0, 1, 0, 1
+
+                Label:
+                    text: str(saturation.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Hue'
+
+                Slider:
+                    id: hue
+                    min: -2000
+                    value: var_hue
+                    max: 2000
+                    step: 50
+                    on_value: root.up_hue(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 1, 1, 0, 0
+
+                Label:
+                    text: str(hue.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Exposure'
+
+                Slider:
+                    id: exposure
+                    min: -70
+                    value: var_exposure
+                    max: 0
+                    step: 10
+                    on_value: root.up_exposure(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 1, 1, 0, 0
+
+                Label:
+                    text: str(exposure.value / 10)
+
+            BoxLayout:
+                Label:
+                    text: 'Sharpness'
+
+                Slider:
+                    id: sharpness
+                    min: 1
+                    value: var_sharpness
+                    max: 7
+                    step: 1
+                    on_value: root.up_sharpness(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 0, 1, 0, 1
+
+                Label:
+                    text: str(sharpness.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Gamma'
+
+                Slider:
+                    id: gamma
+                    min: 100
+                    value: var_gamma
+                    max: 300
+                    step: 1
+                    on_value: root.up_gamma(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 0, 1, 0, 1
+
+                Label:
+                    text: str(gamma.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Temperature'
+
+                Slider:
+                    id: temperature
+                    min: 2800
+                    value: var_temperature
+                    max: 6500
+                    step: 1
+                    on_value: root.up_temperature(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 0, 1, 0, 1
+
+                Label:
+                    text: str(temperature.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Focus'
+
+                Slider:
+                    id: focus
+                    min: 0
+                    value: var_focus
+                    max: 1023
+                    step: 1
+                    on_value: root.up_focus(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 1, 1, 0, 0
+
+                Label:
+                    text: str(focus.value)
+
+            BoxLayout:
+                Label:
+                    text: 'Backlight'
+
+                Slider:
+                    id: backlight
+                    min: 0
+                    value: var_backlight
+                    max: 3
+                    step: 1
+                    on_value: root.up_backlight(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 1, 1, 0, 0
+
+                Label:
+                    text: str(backlight.value)
+
+            BoxLayout:
+                Label:
+                    text: 'White Balance'
+
+                Slider:
+                    id: white_balance
+                    min: 2800
+                    value: var_white_balance
+                    max: 6500
+                    step: 10
+                    on_value: root.up_white_balance(*args)
+                    orientation: 'horizontal'
+                    value_track_color: 0, 1, 0, 1
+
+                Label:
+                    text: str(white_balance.value)
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                size: root.width, '48dp'
+
+                Button:
+                    text: 'Back'
+                    on_release: root.isShownMenu = not root.isShownMenu
+
+                Button:
+                    text: 'Default'
+                    on_press:
+                    on_release:
+                        #width.value = var_width
+                        #height.value = var_height
+                        frames.value = var_frames
+                        check_switch.active = var_check
+                        brightness.value = var_brightness
+                        contrast.value = var_contrast
+                        saturation.value = var_saturation
+                        hue.value = var_hue
+                        exposure.value = var_exposure
+                        sharpness.value = var_sharpness
+                        auto_exposure.value = var_auto_exposure
+                        gamma.value = var_gamma
+                        temperature.value = var_temperature
+                        focus.value = var_focus
+                        backlight.value = var_backlight
+                        auto_focus.value = var_auto_focus
+                        auto_white_balance.value = var_auto_white_balance
+                        white_balance.value = var_white_balance
+
+

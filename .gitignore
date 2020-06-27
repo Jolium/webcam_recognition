@@ -1,0 +1,8 @@
+*
+
+!.gitignore
+!encoder.py
+!hash_sha1.py
+!main.py
+!mycam.kv
+!settings.py
