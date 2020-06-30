@@ -18,7 +18,7 @@ def hash_directory(path=folder_path):
             file_path = os.path.join(root, names)
 
             # Hash the path and add to the digest to account for empty files/directories
-            digest.update(hashlib.sha1(file_path[len(path):].encode()).digest())
+            digest.update(hashlib.sha1(file_path.encode()).digest())
 
             if os.path.isfile(file_path):
                 with open(file_path, 'rb') as f_obj:

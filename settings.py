@@ -1,12 +1,15 @@
+from pathlib import Path
+
+
 """
 Settings of recognition.py
 """
 
 # Global vars
-folder_path = 'images/'                 # Path to standard folder
-allowed_formats = ('.jpg', '.png')      # Allowed pictures formats
-database = 'database.json'              # Database file
-auto_check = 1                          # Checks each start for changes in standard folder
+folder_path = Path.cwd() / 'images'        # Path to main folder ('Path.home()' for home directory)
+allowed_formats = ('.jpg', '.png')          # Allowed pictures formats
+database = Path.cwd() / 'database.json'     # Database file
+auto_check = 1                              # Checks each start for changes in main folder
 
 # webcam vars
 webcam = 0              # '0' is the standard webcam                    default = 0
@@ -26,5 +29,5 @@ temperature = 2800      # Temperature (2800, 6500)                      default 
 focus = 0               # Focus (0, 255) increment: 5                   default = 0
 backlight = 0           # Backlight (0, 3)                              default = 0
 auto_focus = 1          # Auto Focus (0, 1)                             default = 1
-auto_white_balance = 0  # Auto White Balance (0, 1)                     default = 0
+auto_white_balance = 1  # Auto White Balance (0, 1)                     default = 1
 white_balance = 4600    # White Balance (2800, 6500)                    default = 4600

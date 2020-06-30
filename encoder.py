@@ -55,20 +55,32 @@ def _export_to_database(names, face_encodings):
 def create_database(path=folder_path):
     """Create lists to be exported to database.json"""
 
-    images = os.listdir(path)
     formats = allowed_formats
     known_face_names = []
     known_face_encodings = []
 
-    for i in images:
-        if i.endswith(formats):
+    for item in os.listdir(folder_path):
+        # Path to each item (pictures and folders)
+        new_path = os.path.join(folder_path, item)
 
-            # Creates a list with all names of known faces
-            name = os.path.splitext(i)
+        if os.path.isdir(new_path):
+            for i in os.listdir(new_path):
+                if i.endswith(formats):
+                    # Add name of folder for each picture in sub folder
+                    known_face_names.append(item)
+
+                    # Create arrays of known face encodings and add it to variable
+                    known_image = face_recognition.load_image_file(os.path.join(new_path, i))
+                    known_face_encoding = face_recognition.face_encodings(known_image)
+                    known_face_encodings.extend(known_face_encoding)
+
+        if os.path.isfile(new_path) and item.endswith(formats):
+            # Add name of each picture in main folder
+            name = os.path.splitext(item)
             known_face_names.append(name[0])
 
-            # Create arrays of known face encodings
-            known_image = face_recognition.load_image_file(path + i)
+            # Create arrays of known face encodings and add it to variable
+            known_image = face_recognition.load_image_file(os.path.join(folder_path, item))
             known_face_encoding = face_recognition.face_encodings(known_image)
             known_face_encodings.extend(known_face_encoding)
 

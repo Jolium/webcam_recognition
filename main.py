@@ -2,25 +2,26 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import BooleanProperty
-from kivy.uix.button import Button
-from kivy.uix.dropdown import DropDown
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.camera import Camera
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
-from kivy.uix.label import Label
-from kivy.uix.popup import Popup
-from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.core.window import Window
-from kivy.uix.widget import Widget
-from kivy.utils import platform
+# from kivy.uix.button import Button
+# from kivy.uix.dropdown import DropDown
+# from kivy.uix.floatlayout import FloatLayout
+# from kivy.uix.boxlayout import BoxLayout
+# from kivy.uix.camera import Camera
+# from kivy.uix.label import Label
+# from kivy.uix.popup import Popup
+# from kivy.uix.textinput import TextInput
+# from kivy.uix.widget import Widget
+# from kivy.utils import platform
 
 import face_recognition
 import cv2
 import numpy as np
+from pathlib import Path
 import os.path
 
 import encoder
@@ -48,7 +49,7 @@ auto_white_balance = sets.auto_white_balance    # Auto White Balance (0, 1)     
 white_balance = sets.white_balance              # White Balance (4000, 7000)                    default = 5000
 
 
-# Window.size = (width, height + 48)
+Window.size = (width*1.5, height*1.5 + 48)
 Window.clearcolor = (.1, .1, .1, 1)
 
 # Auto check for new pictures and if needed folder/database already exist on start up
@@ -127,7 +128,7 @@ class MySettings(Screen):
     def up_check(self, *args):
         global auto_check, capture
         auto_check = int(args[1])  # Auto check on start up
-        print(auto_check)
+        # print(auto_check)
 
     def up_brightness(self, *args):
         global brightness, capture
@@ -358,15 +359,17 @@ if __name__ == '__main__':
     # Auto check for new pictures and if needed folder/database already exist on start up
     if auto_check:
 
-        # Create folder 'images' if it does not exist
-        if not os.path.isdir(sets.folder_path):
-            os.mkdir(sets.folder_path)
+        path_folder = sets.folder_path
+
+        # Create main folder if it does not exist
+        if not Path.is_dir(path_folder):
+            path_folder.mkdir()
 
         # Create database if it does not exist
-        if not os.path.isfile(sets.database):
+        if not Path.is_file(sets.database):
             encoder.create_database()
 
-        # Check if are changes in the folder 'images'
+        # Check if are changes in the main folder
         hash_sha1.compare_hashes()
 
     MyCamApp().run()
