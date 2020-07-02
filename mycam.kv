@@ -48,67 +48,35 @@
                     Label:
                         text: 'Auto Exposure'
 
-                    BoxLayout:
-
-                        Label:
-                            text: 'No'
-
-                        Slider:
-                            id: auto_exposure
-                            min: 1
-                            value: var_auto_exposure
-                            max: 3
-                            step: 2
-                            on_value: root.up_auto_exposure(*args)
-                            orientation: 'horizontal'
-                            value_track_color: 1, 1, 0, 0
-
-                        Label:
-                            text: 'Yes'
+                    CheckBox:
+                        id: auto_exposure
+                        #size_hint_y: None
+                        height: '48dp'
+                        active: var_auto_exposure
+                        on_active: root.up_auto_exposure(*args)
 
                 BoxLayout:
                     Label:
                         text: 'Auto Focus'
 
-                    BoxLayout:
-
-                        Label:
-                            text: 'No'
-
-                        Slider:
-                            id: auto_focus
-                            min: 0
-                            value: var_auto_focus
-                            max: 1
-                            step: 1
-                            on_value: root.up_auto_focus(*args)
-                            orientation: 'horizontal'
-                            value_track_color: 1, 1, 0, 0
-
-                        Label:
-                            text: 'Yes'
+                    CheckBox:
+                        id: auto_focus
+                        #size_hint_y: None
+                        height: '48dp'
+                        active: var_auto_focus
+                        on_active: root.up_auto_focus(*args)
 
                 BoxLayout:
                     Label:
                         text: 'Auto White Balance'
 
-                    BoxLayout:
+                    CheckBox:
+                        id: auto_white_balance
+                        #size_hint_y: None
+                        height: '48dp'
+                        active: var_auto_white_balance
+                        on_active: root.up_auto_white_balance(*args)
 
-                        Label:
-                            text: 'No'
-
-                        Slider:
-                            id: auto_white_balance
-                            min: 0
-                            value: var_auto_white_balance
-                            max: 1
-                            step: 1
-                            on_value: root.up_auto_white_balance(*args)
-                            orientation: 'horizontal'
-                            value_track_color: 0, 1, 0, 1
-
-                        Label:
-                            text: 'Yes'
 
                 BoxLayout:
                     orientation: 'horizontal'
@@ -267,6 +235,7 @@
 
                 Slider:
                     id: exposure
+                    disabled: True if auto_exposure.active else False
                     min: -70
                     value: var_exposure
                     max: 0
@@ -335,6 +304,7 @@
 
                 Slider:
                     id: focus
+                    disabled: True if auto_focus.active else False
                     min: 0
                     value: var_focus
                     max: 1023
@@ -369,6 +339,7 @@
 
                 Slider:
                     id: white_balance
+                    disabled: True if auto_white_balance.active else False
                     min: 2800
                     value: var_white_balance
                     max: 6500
@@ -403,13 +374,14 @@
                         hue.value = var_hue
                         exposure.value = var_exposure
                         sharpness.value = var_sharpness
-                        auto_exposure.value = var_auto_exposure
                         gamma.value = var_gamma
                         temperature.value = var_temperature
                         focus.value = var_focus
                         backlight.value = var_backlight
-                        auto_focus.value = var_auto_focus
-                        auto_white_balance.value = var_auto_white_balance
                         white_balance.value = var_white_balance
+                        auto_exposure.active = var_auto_exposure
+                        auto_focus.active = var_auto_focus
+                        auto_white_balance.active = var_auto_white_balance
+
 
 

@@ -59,7 +59,7 @@ auto_check = sets.auto_check  # 1=True, 0=False  ('0' starts up faster)
 process_this_frame = False
 
 # Start video capture
-capture = cv2.VideoCapture(sets.webcam)
+capture = cv2.VideoCapture(sets.webcam, cv2.CAP_DSHOW)
 
 
 class MySettings(Screen):
@@ -324,7 +324,8 @@ class KivyCamera(Image):
         if ret:
             # convert it to texture
             buf1 = cv2.flip(frame, 0)
-            buf = buf1.tostring()
+            # buf = buf1.tostring()
+            buf = buf1.tobytes()
             image_texture = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
             image_texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
@@ -343,7 +344,7 @@ sm.add_widget(MySettings(name='settings'))
 sm.current = 'settings'
 
 
-class MyCamApp(App):
+class CameraApp(App):
     def build(self):
         return sm
 
@@ -372,4 +373,4 @@ if __name__ == '__main__':
         # Check if are changes in the main folder
         hash_sha1.compare_hashes()
 
-    MyCamApp().run()
+    CameraApp().run()
