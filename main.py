@@ -22,6 +22,7 @@ import face_recognition
 import cv2
 import numpy as np
 from pathlib import Path
+import platform
 import os.path
 
 import encoder
@@ -59,7 +60,11 @@ Window.size = (width*1.5, height*1.5 + 48)
 Window.clearcolor = (.1, .1, .1, 1)
 
 # Start video capture
-capture = cv2.VideoCapture(sets.webcam, cv2.CAP_DSHOW)
+plt = platform.system()
+if plt == 'Windows':
+    capture = cv2.VideoCapture(sets.webcam, cv2.CAP_DSHOW)
+else:
+    capture = cv2.VideoCapture(sets.webcam)
 
 # Load kv file
 Builder.load_file('mycam.kv')
