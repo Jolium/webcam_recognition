@@ -5,12 +5,12 @@ from kivy.properties import BooleanProperty
 from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
-from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
+# from kivy.uix.screenmanager import Screen, ScreenManager
 # from kivy.uix.button import Button
 # from kivy.uix.dropdown import DropDown
 # from kivy.uix.floatlayout import FloatLayout
-# from kivy.uix.boxlayout import BoxLayout
 # from kivy.uix.camera import Camera
 # from kivy.uix.label import Label
 # from kivy.uix.popup import Popup
@@ -48,26 +48,47 @@ auto_focus = sets.auto_focus                    # Auto Focus (0, 1)             
 auto_white_balance = sets.auto_white_balance    # Auto White Balance (0, 1)                     default = 0
 white_balance = sets.white_balance              # White Balance (4000, 7000)                    default = 5000
 
-
-Window.size = (width*1.5, height*1.5 + 48)
-Window.clearcolor = (.1, .1, .1, 1)
-
 # Auto check for new pictures and if needed folder/database already exist on start up
 auto_check = sets.auto_check  # 1=True, 0=False  ('0' starts up faster)
 
 # Add face recognition to camera
 process_this_frame = False
 
+# Window attributes
+Window.size = (width*1.5, height*1.5 + 48)
+Window.clearcolor = (.1, .1, .1, 1)
+
 # Start video capture
 capture = cv2.VideoCapture(sets.webcam, cv2.CAP_DSHOW)
 
+# Load kv file
+Builder.load_file('mycam.kv')
 
-class MySettings(Screen):
+
+def initial_checkup():
+    # Auto check for new pictures and if needed folder/database already exist on start up
+    if auto_check:
+
+        path_folder = sets.folder_path
+
+        # Create main folder if it does not exist
+        if not Path.is_dir(path_folder):
+            path_folder.mkdir()
+
+        # Create database if it does not exist
+        if not Path.is_file(sets.database):
+            encoder.create_database()
+
+        # Check if are changes in the main folder
+        hash_sha1.compare_hashes()
+
+
+class MyCamera(BoxLayout):
     """Class for creating a Slider widget."""
     isShownMenu = BooleanProperty(False)
 
     def __init__(self, **kwargs):
-        super(MySettings, self).__init__(**kwargs)
+        super(MyCamera, self).__init__(**kwargs)
 
     def myframe(self):
         global process_this_frame
@@ -215,10 +236,6 @@ class MySettings(Screen):
         # print(white_balance)
 
 
-class MyManager(ScreenManager):
-    pass
-
-
 class KivyCamera(Image):
 
     def __init__(self, **kwargs):
@@ -333,20 +350,18 @@ class KivyCamera(Image):
             self.texture = image_texture
 
 
-Builder.load_file('mycam.kv')
-
-# Create the screen manager
-sm = ScreenManager()
-sm.add_widget(MySettings(name='settings'))
-
-# By default, the first screen added into the ScreenManager will be
-# displayed. You can then change to another screen.
-sm.current = 'settings'
+# # Create the screen manager
+# sm = ScreenManager()
+# sm.add_widget(MySettings(name='settings'))
+#
+# # By default, the first screen added into the ScreenManager will be
+# # displayed. You can then change to another screen.
+# sm.current = 'settings'
 
 
 class CameraApp(App):
     def build(self):
-        return sm
+        return MyCamera()
 
     def on_stop(self):
         # Release handle to the webcam
@@ -356,21 +371,10 @@ class CameraApp(App):
         print("Closed")
 
 
-if __name__ == '__main__':
-    # Auto check for new pictures and if needed folder/database already exist on start up
-    if auto_check:
-
-        path_folder = sets.folder_path
-
-        # Create main folder if it does not exist
-        if not Path.is_dir(path_folder):
-            path_folder.mkdir()
-
-        # Create database if it does not exist
-        if not Path.is_file(sets.database):
-            encoder.create_database()
-
-        # Check if are changes in the main folder
-        hash_sha1.compare_hashes()
-
+def main():
+    initial_checkup()
     CameraApp().run()
+
+
+if __name__ == '__main__':
+    main()
