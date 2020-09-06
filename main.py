@@ -23,7 +23,7 @@ import cv2
 import numpy as np
 from pathlib import Path
 import platform
-import os.path
+# import os.path
 
 import encoder
 import hash_sha1
@@ -341,7 +341,7 @@ class KivyCamera(Image):
             # Draw a label with a name below the face
             cv2.rectangle(frame, (left, bottom - 30), (right, bottom), frame_color, cv2.FILLED)
             font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.8, (255, 255, 255), 1)
+            cv2.putText(frame, name, (left + 6, bottom - 6), font, 0.8, (0, 0, 0), 1)
 
         if ret:
             # convert it to texture
@@ -373,7 +373,7 @@ class CameraApp(App):
         global capture
         capture.release()
         cv2.destroyAllWindows()
-        print("Closed")
+        # print("Closed")
 
 
 def main():

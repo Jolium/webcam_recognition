@@ -6,7 +6,7 @@ Settings of recognition.py
 """
 
 # Global vars
-folder_path = Path.cwd() / 'images'        # Path to main folder ('Path.home()' for home directory)
+folder_path = Path.cwd() / 'images'         # Path to main folder ('Path.home()' for home directory)
 allowed_formats = ('.jpg', '.png')          # Allowed pictures formats
 database = Path.cwd() / 'database.json'     # Database file
 auto_check = 1                              # Checks each start for changes in main folder
